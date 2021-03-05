@@ -19,7 +19,7 @@
 
 ### Step 3. Download file
 - Create a folder for this module, e.g. *imse785-web-scraping*.
-- Download [raw file](https://raw.githubusercontent.com/1024tm/imse785/master/simple_weather_scraper.py) from Github, and put in the folder.
+- Download [raw file](https://raw.githubusercontent.com/mwm1024/imse785scraper/master/simple_weather_scraper.py) from Github, and put in the folder.
 - Launch terminal/cmd and navigate to the folder.
 
 ### Step 4. Use the simple web scraper

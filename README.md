@@ -18,4 +18,4 @@ python3 simple_weather_data_scraper.py [-h] [-d days] [-o path] zipcode date
 Please refer to the corresponding Canvas module page for detailed instructions.
 
 ### Disclamation
-This repository is actively maintained.    
+This repository is not actively maintained.    
