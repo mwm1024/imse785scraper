@@ -19,7 +19,8 @@ def get_weather_data(zipcode, date):
         page = urlopen(req).read()
     except HTTPError as err:
         if err.code == 429:
-            print('⚠️ HTTP Error 429, please retry after 120 seconds.')
+            print('⚠️ HTTP Error 429, ',
+                  f'please retry after {err.hdrs["Retry-After"]} seconds.')
         else:
             raise(err)
     else:
