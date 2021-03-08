@@ -17,9 +17,11 @@ def get_weather_data(zipcode, date):
     try:
         req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         page = urlopen(req).read()
-    except HTTPError as e:
-        raise
-        print('* Fail to load page, possiblly for invalid zip code.')
+    except HTTPError as err:
+        if err.code == 429:
+            print('⚠️ HTTP Error 429, please retry after 120 seconds.')
+        else:
+            raise(err)
     else:
         soup = BS(page, 'html.parser')
         title = soup.find(id='page-title').string.strip() + ', %s:' % date
@@ -49,19 +51,26 @@ def collect_weather_data(zipcode, date, days):
     weather_data_list = []
     for date in dates:
         weather_data = get_weather_data(zipcode, date)
-        weather_data_list.append(weather_data if weather_data else {'Date': date})
+        if len(weather_data) > 1:
+            weather_data_list.append(weather_data if weather_data else {'Date': date})
+        else:
+            break
     return weather_data_list
 
 
 def write_to_csv(output, contents_list):
     try:
+        file_action = 'w'
         if path.isfile(output):
-            if input('File exists! Overwrite? (y/N) ') not in ('Y', 'y'):
-                print('Cancelled.')
-                return 0
-        with open(output, 'w', newline='') as fp:
+            choice = input('File exists! Overwrite(W) or Append(A): ')
+            if choice.lower() in ('w', 'a'):
+                file_action = choice.lower()
+            else:
+                exit('Cancelled.')
+        with open(output, file_action, newline='') as fp:
             csv_writer = csv.DictWriter(fp, fieldnames=contents_list[0].keys())
-            csv_writer.writeheader()
+            if file_action == 'w':
+                csv_writer.writeheader()
             for row in contents_list:
                 csv_writer.writerow(row)
         print("%d rows written to %s." % (len(contents_list), output))
